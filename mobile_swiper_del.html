@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Mobile</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
+    <script>
+      !(function(e,t){
+        var n = t.documentElement,d=e.devicePixelRatio||1,BASE_DESIGN=7.5;
+        function i() {var e = n.clientWidth / BASE_DESIGN;n.style.fontSize = e + "px"}
+        if (function e() { t.body ? t.body.style.fontSize = "16px" : t.addEventListener("DOMContentLoaded", e) }(),i()){}
+      })(window,document)
+    </script>
+    <style>
+      html,body{padding:0;margin:0;height:100%;}
+      ul,li,ol{outline:none;list-style:none;}
+    </style>
+    <style>
+      i{font-style:normal;}
+      a{color:#393939;text-decoration:none;}
+      .list{overflow:hidden;margin-top:.2rem;padding-left:.3rem;border-top:1px solid #ddd;}
+      .list li{overflow:hidden;width:150%;border-bottom:1px solid #ddd;}
+      .list li a{display:block;height:.88rem;line-height:.88rem;-webkit-transition:all 0.3s linear;transition:all 0.3s linear;}
+      .list li i{float:right;width:15%;text-align:center;background:#E2421B;color:#fff;margin-left:1%;}
+      .swipeleft{transform:translateX(-32%);-webkit-transform:translateX(-32%);}
+    </style>
+  </head>
+  <body>
+      <div class="list">
+        <ul>
+          <li><a href="#">左滑显示删除按钮1左滑显示删除按钮1<i>删除</i><i>修改</i></a></li>
+          <li><a href="#">左滑显示删除按钮2<i>删除</i><i>修改</i></a></li>
+          <li><a href="#">左滑显示删除按钮3<i>删除</i><i>修改</i></a></li>
+        </ul>
+      </div>
+    <script>
+      function swipeleft(opts){
+        var targets = opts.targets;
+        var startX, startY, moveX, moveY, isSwipeX, isSwipeY;
+        for (var i = 0; i < targets.length; i++) {
+          swipeEvt(targets[i]);
+        }
+
+        function swipeEvt(ele){
+          ele.addEventListener('touchstart', function (event) {
+            startX = event.changedTouches[0].pageX;
+            startY = event.changedTouches[0].pageY;
+            isSwipeX = true;
+            isSwipeY = true;
+          });
+          ele.addEventListener('touchmove', function (event) {
+            moveX = event.changedTouches[0].pageX;
+            moveY = event.changedTouches[0].pageY;
+
+            // 左右滑动
+            if (isSwipeX && Math.abs(moveX - startX) - Math.abs(moveY - startY) > 0) {
+              // 阻止事件冒泡
+              event.stopPropagation();
+              if (moveX - startX > 10) {   //右滑
+                event.preventDefault();
+                this.className = "";    //右滑收起
+              }
+              
+              if (startX - moveX > 10) {   //左滑
+                event.preventDefault();
+                this.className = "swipeleft";   //左滑展开
+              }
+              isSwipeY = false;
+            }
+            // 上下滑动
+            if (isSwipeY && Math.abs(moveX - startX) - Math.abs(moveY - startY) < 0) {
+              isSwipeX = false;
+            }
+          });
+        }
+        
+      }
+
+      swipeleft({
+        targets: document.querySelectorAll('.list li a')
+      });
+    </script>
+  </body>
+</html>
